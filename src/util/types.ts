@@ -1,0 +1,1 @@
+export type Action = (idx: number, progress: string) => void;
