@@ -26,6 +26,20 @@ function createHolders(bars: Array<IndeterminateProgressBar>): Array<Holder> {
 
 function setupCanvas(holder: Holder) {
     holder.context.font = '24px serif';
+
+    holder.canvas.onclick = () => {
+        if (holder.bar.isRunning) holder.bar.stop();
+        else start(holder);
+    }
+}
+
+function start(holder: Holder) {
+    holder.bar.start((idx, progress) => {
+        if (holder.bar instanceof PulseIndeterminateProgressBar) print(idx, progress, true);
+        // if (holder.bar instanceof StandardIndeterminateProgressBar) print(idx, progress, true);
+        // if (holder.bar instanceof WaveIndeterminateProgressBar) print(idx, progress, true);
+        draw(holder, progress);
+    });
 }
 
 function print(idx: number, progress: string, isDebug: boolean = false) {
@@ -52,12 +66,8 @@ function main() {
     let holders: Array<Holder> = createHolders(bars);
 
     holders.forEach(it => {
-        setupCanvas(it)
-
-        it.bar.start((idx, progress) => {
-            if (it.bar instanceof WaveIndeterminateProgressBar) print(idx, progress, true);
-            draw(it, progress);
-        });
+        setupCanvas(it);
+        start(it);
     });
 }
 

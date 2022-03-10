@@ -7,3 +7,10 @@ export class Holder {
         readonly context: CanvasRenderingContext2D = <CanvasRenderingContext2D> canvas.getContext('2d')
     ) { }
 }
+
+export class LastProgress {
+    constructor(
+        readonly idx: number,
+        readonly progress: string
+    ) { }
+}

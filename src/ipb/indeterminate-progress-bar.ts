@@ -1,7 +1,16 @@
-import { Action } from "../util/types";
+import { LastProgress } from "../util/models.js";
+import { Action } from "../util/types.js";
 
 export default abstract class IndeterminateProgressBar {
-    protected isRunning: boolean = false;
+    protected _isRunning: boolean = false;
+    get isRunning(): boolean {
+        return this._isRunning
+    }
+    
+    private _lastProgress: LastProgress | null = null;
+    protected get lastProgress(): LastProgress | null {
+        return this._lastProgress
+    }
 
     constructor(
         readonly length: number = IndeterminateProgressBar.DEFAULT_LENGTH,
@@ -21,11 +30,21 @@ export default abstract class IndeterminateProgressBar {
     protected filledProgress: string = this.filled.repeat(this.length);
 
     start(action?: Action): void {
-        this.isRunning = true;
+        if (this._isRunning) throw new Error('Progress already running. You forgot to stop it?');
+
+        this._isRunning = true;
     }
 
-    stop() {
-        this.isRunning = false;
+    stop(): void {
+        this._isRunning = false;
+    }
+
+    protected saveProgress(idx: number, progress: string): void {
+        this._lastProgress = new LastProgress(idx, progress);
+    }
+
+    protected clearProgress(): void {
+        this._lastProgress = null;
     }
 
     /** Constanst */

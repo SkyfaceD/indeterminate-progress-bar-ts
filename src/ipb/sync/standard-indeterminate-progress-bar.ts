@@ -13,18 +13,30 @@ export default class StandardIndeterminateProgressBar extends IndeterminateProgr
 
     /**
      * Animation phases:
-     * 0: ▰▱▱▱▱
-     * 1: ▱▰▱▱▱
-     * 2: ▱▱▰▱▱
-     * 3: ▱▱▱▰▱
-     * 4: ▱▱▱▱▰
+     * 0:   ▰▱▱▱▱
+     * 1:   ▱▰▱▱▱
+     * 2:   ▱▱▰▱▱
+     * 3:   ▱▱▱▰▱
+     * 4:   ▱▱▱▱▰
      */
     protected override consume(action: Action) {
-        for (let i = 0; i < this.length; i++) {
-            setTimeout(() => {
-                let progress = this.blankProgress.replaceAt(i, this.filled)
-                action(i, progress);
-            }, i * this.delay);
+        let idx = this.lastProgress == null ? 0 : this.lastProgress?.idx;
+        this.clearProgress();
+
+        for (let i = idx; i < this.length; i++) {
+            this.saveTimeoutId(
+                setTimeout(() => {
+                    if (!this.isRunning) {
+                        this.saveProgress(i, this.blankProgress.replaceAt(i, this.filled))
+                        this.clearTimeouts()
+                        return
+                    }
+                    
+                    let progress = this.blankProgress.replaceAt(i, this.filled);
+
+                    action(i, progress);
+                }, i * this.delay)
+            );
         }
     }
 };
