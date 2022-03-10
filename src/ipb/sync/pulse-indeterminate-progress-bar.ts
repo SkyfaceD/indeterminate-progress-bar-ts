@@ -15,8 +15,21 @@ export default class PulseIndeterminateProgressBar extends IndeterminateProgress
 
     protected override timeout: number = (this.length + 1) * this.delay;
 
+    /**
+     * Animation phases:
+     * 0: ▱▱▱▱▰▱▱▱▱
+     * 1: ▱▱▱▰▰▰▱▱▱
+     * 2: ▱▱▰▰▰▰▰▱▱
+     * 3: ▱▰▰▰▰▰▰▰▱
+     * 4: ▰▰▰▰▰▰▰▰▰
+     * 5: ▰▰▰▰▱▰▰▰▰
+     * 6: ▰▰▰▱▱▱▰▰▰
+     * 7: ▰▰▱▱▱▱▱▰▰
+     * 8: ▰▱▱▱▱▱▱▱▰
+     * 9: ▱▱▱▱▱▱▱▱▱
+     */
     protected override consume(action: Action) {
-        var progress = this.blankProgress;
+        let progress = this.blankProgress;
 
         for (let i = 0; i <= this.length; i++) {
             setTimeout(() => {

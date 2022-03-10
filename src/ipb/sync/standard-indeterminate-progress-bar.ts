@@ -3,15 +3,23 @@ import { Action } from '../../util/types.js'
 
 export default class StandardIndeterminateProgressBar extends IndeterminateProgressBarSync {
     constructor(
-        length = 5,
-        delay = 150,
-        blank = '▱',
-        filled = '▰',
+        readonly length: number = 5,
+        readonly delay: number = 100,
+        protected readonly blank: string = '▱',
+        protected readonly filled: string = '▰'
     ) {
         super(length, delay, blank, filled);
     }
 
-    protected consume(action: Action) {
+    /**
+     * Animation phases:
+     * 0: ▰▱▱▱▱
+     * 1: ▱▰▱▱▱
+     * 2: ▱▱▰▱▱
+     * 3: ▱▱▱▰▱
+     * 4: ▱▱▱▱▰
+     */
+    protected override consume(action: Action) {
         for (let i = 0; i < this.length; i++) {
             setTimeout(() => {
                 let progress = this.blankProgress.replaceAt(i, this.filled)
