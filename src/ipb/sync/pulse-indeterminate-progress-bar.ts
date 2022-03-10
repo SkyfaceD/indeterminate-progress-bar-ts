@@ -3,19 +3,19 @@ import { Action } from '../../util/types.js'
 
 export default class PulseIndeterminateProgressBar extends IndeterminateProgressBarSync {
     constructor(
-        length = 9,
-        delay = 50,
-        blank = '▱',
-        filled = '▰',
+        readonly length: number = 9,
+        readonly delay: number = 50,
+        protected readonly blank: string = '▱',
+        protected readonly filled: string = '▰'
     ) {
         if (length % 2 == 0) throw Error('Length must be odd');
 
         super(length, delay, blank, filled);
     }
 
-    protected timeout: number = (this.length + 1) * this.delay;
+    protected override timeout: number = (this.length + 1) * this.delay;
 
-    protected consume(action: Action) {
+    protected override consume(action: Action) {
         var progress = this.blankProgress;
 
         for (let i = 0; i <= this.length; i++) {

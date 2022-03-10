@@ -12,14 +12,9 @@ export default class StandardIndeterminateProgressBar extends IndeterminateProgr
     }
 
     protected consume(action: Action) {
-        var progress = this.blankProgress;
-
-        for (let i = 0; i <= this.length; i++) {
+        for (let i = 0; i < this.length; i++) {
             setTimeout(() => {
-                if (i == 0) progress = progress.replaceAt(this.half, this.filled);
-                else if (i == this.half + 1) progress = progress.replaceAt(this.half, this.blank);
-                else if (i <= this.half) progress = progress.replaceAt(this.half - i, this.filled).replaceAt(this.half + i, this.filled);
-                else progress = progress.replaceAt(this.length - i, this.blank).replaceAt(i - 1, this.blank);
+                let progress = this.blankProgress.replaceAt(i, this.filled)
                 action(i, progress);
             }, i * this.delay);
         }

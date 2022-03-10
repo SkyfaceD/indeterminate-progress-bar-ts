@@ -4,6 +4,10 @@ export default class PulseIndeterminateProgressBar extends IndeterminateProgress
         if (length % 2 == 0)
             throw Error('Length must be odd');
         super(length, delay, blank, filled);
+        this.length = length;
+        this.delay = delay;
+        this.blank = blank;
+        this.filled = filled;
         this.timeout = (this.length + 1) * this.delay;
     }
     consume(action) {
