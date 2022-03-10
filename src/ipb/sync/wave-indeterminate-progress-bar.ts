@@ -11,7 +11,9 @@ export default class WaveIndeterminateProgressBar extends IndeterminateProgressB
         super(length, delay, blank, filled);
     }
 
-    protected override timeout: number = this.length * 2 * this.delay;
+    protected override timeout(): number { 
+        return this.length * 2 * this.delay 
+    };
 
     /**
      * Animation phases:
@@ -34,8 +36,6 @@ export default class WaveIndeterminateProgressBar extends IndeterminateProgressB
         let idx = this.lastProgress == null ? 0 : this.lastProgress.idx;
         let progress = this.lastProgress == null ? this.blankProgress : this.lastProgress.progress;
         this.clearProgress();
-
-        console.log(idx, progress);
 
         for (let i = idx; i < this.length * 2; i++) {
             this.saveTimeoutId(

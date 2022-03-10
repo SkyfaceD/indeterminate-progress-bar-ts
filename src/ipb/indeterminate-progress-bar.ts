@@ -2,7 +2,7 @@ import { LastProgress } from "../util/models.js";
 import { Action } from "../util/types.js";
 
 export default abstract class IndeterminateProgressBar {
-    protected _isRunning: boolean = false;
+    private _isRunning: boolean = false;
     get isRunning(): boolean {
         return this._isRunning
     }
@@ -22,7 +22,9 @@ export default abstract class IndeterminateProgressBar {
         if (length > IndeterminateProgressBar.MAX_LENGTH) throw new Error(`Passed length > max length: ${length} > ${IndeterminateProgressBar.MAX_LENGTH}`);
     }
 
-    protected timeout: number = this.length * this.delay;
+    protected timeout(): number {
+        return this.length * this.delay
+    };
 
     protected half: number = this.length / 2;
 
@@ -30,7 +32,7 @@ export default abstract class IndeterminateProgressBar {
     protected filledProgress: string = this.filled.repeat(this.length);
 
     start(action?: Action): void {
-        if (this._isRunning) throw new Error('Progress already running. You forgot to stop it?');
+        if (this.isRunning) throw new Error('Progress already running. You forgot to stop it?');
 
         this._isRunning = true;
     }

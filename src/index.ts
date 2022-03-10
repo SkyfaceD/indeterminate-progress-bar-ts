@@ -4,6 +4,7 @@ import StandardIndeterminateProgressBar from './ipb/sync/standard-indeterminate-
 import WaveIndeterminateProgressBar from './ipb/sync/wave-indeterminate-progress-bar.js';
 import { Holder } from './util/models.js';
 import './util/extensions.js';
+import IndeterminateProgressBarSync from './ipb/sync/indeterminate-progress-bar.js';
 
 function createHolders(bars: Array<IndeterminateProgressBar>): Array<Holder> {
     let result = [];
@@ -35,7 +36,7 @@ function setupCanvas(holder: Holder) {
 
 function start(holder: Holder) {
     holder.bar.start((idx, progress) => {
-        if (holder.bar instanceof PulseIndeterminateProgressBar) print(idx, progress, true);
+        // if (holder.bar instanceof PulseIndeterminateProgressBar) print(idx, progress, true);
         // if (holder.bar instanceof StandardIndeterminateProgressBar) print(idx, progress, true);
         // if (holder.bar instanceof WaveIndeterminateProgressBar) print(idx, progress, true);
         draw(holder, progress);
@@ -58,7 +59,7 @@ function draw(holder: Holder, progress: string) {
 }
 
 function main() {
-    let bars: Array<IndeterminateProgressBar> = [
+    let bars: Array<IndeterminateProgressBarSync> = [
         new PulseIndeterminateProgressBar(),
         new StandardIndeterminateProgressBar(),
         new WaveIndeterminateProgressBar(),

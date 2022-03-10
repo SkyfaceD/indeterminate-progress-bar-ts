@@ -22,7 +22,7 @@ export default class StandardIndeterminateProgressBar extends IndeterminateProgr
     protected override consume(action: Action) {
         let idx = this.lastProgress == null ? 0 : this.lastProgress?.idx;
         this.clearProgress();
-
+        
         for (let i = idx; i < this.length; i++) {
             this.saveTimeoutId(
                 setTimeout(() => {

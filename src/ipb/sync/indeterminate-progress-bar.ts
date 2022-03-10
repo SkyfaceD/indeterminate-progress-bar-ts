@@ -1,5 +1,6 @@
 import IndeterminateProgressBar from "../indeterminate-progress-bar.js";
 import { Action } from "../../util/types.js";
+import PulseIndeterminateProgressBar from "./pulse-indeterminate-progress-bar.js";
 
 export default abstract class IndeterminateProgressBarSync extends IndeterminateProgressBar {
     private intervalId: number | undefined = undefined;
@@ -20,9 +21,19 @@ export default abstract class IndeterminateProgressBarSync extends Indeterminate
         super.start();
         this.consume(action);
 
+        let timeout = this.timeout();
         this.intervalId = setInterval(() => {
-            this.consume(action);
-        }, this.timeout);
+            this.consume((idx, progress) => {
+                if (this instanceof PulseIndeterminateProgressBar) {
+                    console.log(timeout);
+                    action(idx, progress);
+                    if (idx == this.length) {
+                        timeout = this.timeout();
+                        this.clearProgress();
+                    }
+                }
+            });
+        }, timeout);
     }
 
     stop() {

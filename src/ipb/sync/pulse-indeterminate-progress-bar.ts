@@ -4,7 +4,7 @@ import { Action } from '../../util/types.js'
 export default class PulseIndeterminateProgressBar extends IndeterminateProgressBarSync {
     constructor(
         readonly length: number = 9,
-        readonly delay: number = 50,
+        readonly delay: number = 300,
         protected readonly blank: string = '▱',
         protected readonly filled: string = '▰'
     ) {
@@ -13,7 +13,10 @@ export default class PulseIndeterminateProgressBar extends IndeterminateProgress
         super(length, delay, blank, filled);
     }
 
-    protected override timeout: number = (this.length + 1) * this.delay;
+    protected override timeout(): number {
+        let idx = this.lastProgress == null ? 0 : this.lastProgress.idx
+        return (this.length - idx + 1) * this.delay;
+    }
 
     /**
      * Animation phases:
@@ -31,11 +34,10 @@ export default class PulseIndeterminateProgressBar extends IndeterminateProgress
     protected override consume(action: Action) {
         let idx = this.lastProgress == null ? 0 : this.lastProgress.idx;
         let progress = this.lastProgress == null ? this.blankProgress : this.lastProgress.progress;
-        this.clearProgress();
 
-        console.log(idx, progress);
-
+        let fix = 0;
         for (let i = idx; i <= this.length; i++) {
+            fix++;
             this.saveTimeoutId(
                 setTimeout(() => {
                     if (!this.isRunning) {
@@ -50,7 +52,7 @@ export default class PulseIndeterminateProgressBar extends IndeterminateProgress
                     else progress = progress.replaceAt(this.length - i, this.blank).replaceAt(i - 1, this.blank);
                     
                     action(i, progress);
-                }, i * this.delay)
+                }, fix * this.delay)
             );
         }
     }
