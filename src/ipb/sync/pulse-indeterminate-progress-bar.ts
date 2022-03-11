@@ -14,8 +14,15 @@ export default class PulseIndeterminateProgressBar extends IndeterminateProgress
     }
 
     protected override timeout(): number {
-        let idx = this.lastProgress == null ? 0 : this.lastProgress.idx
-        return (this.length - idx + 1) * this.delay;
+        return this.lastProgress == null ? 0 : this.interval - this.lastProgress.idx * this.delay;
+    }
+
+    protected override interval: number = (this.length + 1) * this.delay;
+
+    protected override clearProgress(idx: number): void {
+        if (idx != this.length) return
+
+        super.clearProgress();
     }
 
     /**

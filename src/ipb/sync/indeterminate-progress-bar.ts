@@ -3,6 +3,7 @@ import { Action } from "../../util/types.js";
 import PulseIndeterminateProgressBar from "./pulse-indeterminate-progress-bar.js";
 
 export default abstract class IndeterminateProgressBarSync extends IndeterminateProgressBar {
+    private timeoutId: number | undefined = undefined;
     private intervalId: number | undefined = undefined;
     private timeouts: Array<number> = [];
 
@@ -15,31 +16,38 @@ export default abstract class IndeterminateProgressBarSync extends Indeterminate
         super(length, delay, blank, filled);
     }
 
+    protected timeout(): number { return 0; }
+
+    protected interval: number = this.length * this.delay;
+
     protected abstract consume(action: Action): void
+
+    private consumer(action: Action) {
+        this.consume((idx, progress) => {
+            action(idx, progress);
+            this.clearProgress(idx);
+        });
+    }
 
     start(action: Action) {
         super.start();
-        this.consume(action);
+        this.consumer(action);
 
-        let timeout = this.timeout();
-        this.intervalId = setInterval(() => {
-            this.consume((idx, progress) => {
-                if (this instanceof PulseIndeterminateProgressBar) {
-                    console.log(timeout);
-                    action(idx, progress);
-                    if (idx == this.length) {
-                        timeout = this.timeout();
-                        this.clearProgress();
-                    }
-                }
-            });
-        }, timeout);
+        this.timeoutId = setTimeout(() => {
+            this.consumer(action);
+
+            this.intervalId = setInterval(() => {
+                this.consumer(action);
+            }, this.interval);
+        }, this.timeout())
     }
 
     stop() {
         super.stop();
+        clearTimeout(this.timeoutId);
         clearInterval(this.intervalId);
 
+        this.timeoutId = undefined;
         this.intervalId = undefined;
     }
 

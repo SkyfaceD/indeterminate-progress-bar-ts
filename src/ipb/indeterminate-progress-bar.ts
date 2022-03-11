@@ -22,10 +22,6 @@ export default abstract class IndeterminateProgressBar {
         if (length > IndeterminateProgressBar.MAX_LENGTH) throw new Error(`Passed length > max length: ${length} > ${IndeterminateProgressBar.MAX_LENGTH}`);
     }
 
-    protected timeout(): number {
-        return this.length * this.delay
-    };
-
     protected half: number = this.length / 2;
 
     protected blankProgress: string = this.blank.repeat(this.length);
@@ -45,7 +41,7 @@ export default abstract class IndeterminateProgressBar {
         this._lastProgress = new LastProgress(idx, progress);
     }
 
-    protected clearProgress(): void {
+    protected clearProgress(idx?: number): void {
         this._lastProgress = null;
     }
 

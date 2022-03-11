@@ -11,9 +11,7 @@ export default class WaveIndeterminateProgressBar extends IndeterminateProgressB
         super(length, delay, blank, filled);
     }
 
-    protected override timeout(): number { 
-        return this.length * 2 * this.delay 
-    };
+    protected override interval: number = this.length * 2 * this.delay;
 
     /**
      * Animation phases:
