@@ -4,13 +4,13 @@ import { Action } from '../../util/types.js'
 export default class PulseIndeterminateProgressBar extends IndeterminateProgressBarSync {
     constructor(
         readonly length: number = 9,
-        readonly delay: number = 300,
+        readonly delay: number = 100,
         protected readonly blank: string = '▱',
         protected readonly filled: string = '▰'
     ) {
-        if (length % 2 == 0) throw Error('Length must be odd');
-
         super(length, delay, blank, filled);
+
+        if (length % 2 == 0) throw Error('Length must be odd');
     }
 
     protected override timeout(): number {
@@ -42,9 +42,8 @@ export default class PulseIndeterminateProgressBar extends IndeterminateProgress
         let idx = this.lastProgress == null ? 0 : this.lastProgress.idx;
         let progress = this.lastProgress == null ? this.blankProgress : this.lastProgress.progress;
 
-        let fix = 0;
+        let timeoutCounter = 0;
         for (let i = idx; i <= this.length; i++) {
-            fix++;
             this.saveTimeoutId(
                 setTimeout(() => {
                     if (!this.isRunning) {
@@ -59,7 +58,7 @@ export default class PulseIndeterminateProgressBar extends IndeterminateProgress
                     else progress = progress.replaceAt(this.length - i, this.blank).replaceAt(i - 1, this.blank);
                     
                     action(i, progress);
-                }, fix * this.delay)
+                }, timeoutCounter++ * this.delay)
             );
         }
     }

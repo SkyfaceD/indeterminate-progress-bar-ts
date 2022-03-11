@@ -4,7 +4,7 @@ export class Holder {
     constructor(
         readonly bar: IndeterminateProgressBar,
         readonly canvas: HTMLCanvasElement,
-        readonly context: CanvasRenderingContext2D = <CanvasRenderingContext2D> canvas.getContext('2d')
+        readonly context: CanvasRenderingContext2D = canvas.getContext('2d')!
     ) { }
 }
 

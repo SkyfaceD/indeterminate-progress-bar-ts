@@ -27,6 +27,8 @@ export default abstract class IndeterminateProgressBar {
     protected blankProgress: string = this.blank.repeat(this.length);
     protected filledProgress: string = this.filled.repeat(this.length);
 
+    protected timeout(): number { return 0; }
+
     start(action?: Action): void {
         if (this.isRunning) throw new Error('Progress already running. You forgot to stop it?');
 

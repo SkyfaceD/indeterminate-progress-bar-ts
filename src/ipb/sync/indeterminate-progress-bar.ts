@@ -1,6 +1,5 @@
 import IndeterminateProgressBar from "../indeterminate-progress-bar.js";
 import { Action } from "../../util/types.js";
-import PulseIndeterminateProgressBar from "./pulse-indeterminate-progress-bar.js";
 
 export default abstract class IndeterminateProgressBarSync extends IndeterminateProgressBar {
     private timeoutId: number | undefined = undefined;
@@ -15,8 +14,6 @@ export default abstract class IndeterminateProgressBarSync extends Indeterminate
     ) {
         super(length, delay, blank, filled);
     }
-
-    protected timeout(): number { return 0; }
 
     protected interval: number = this.length * this.delay;
 
@@ -56,9 +53,7 @@ export default abstract class IndeterminateProgressBarSync extends Indeterminate
     }
 
     protected clearTimeouts() {
-        this.timeouts.forEach(it => {
-            clearTimeout(it)
-        });
+        this.timeouts.forEach(clearTimeout);
         this.timeouts = [];
     }
 }

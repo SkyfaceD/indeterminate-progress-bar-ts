@@ -17,7 +17,7 @@ export default abstract class IndeterminateProgressBarAsync extends Indeterminat
         super.start()
         while(this.isRunning) {
             this.consume(action);
-            await new Promise(res => setTimeout(res, this.timeout));
+            await new Promise(res => setTimeout(res, this.timeout()));
         }
     }
 }
