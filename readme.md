@@ -6,3 +6,4 @@
 ### Preview
 
 ![Preview](./.demo/gifs/web-pb.gif)
+![Preview](./.demo/gifs/web-pb2.gif)
