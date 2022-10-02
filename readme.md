@@ -1,3 +1,5 @@
+### Indeterminate progress bar mostly for cli (See source [code](https://gist.github.com/SkyfaceD/1f088a773a93c02ca42863bea0424195) written on Kotlin). Adapted to TypeScript with canvas.
+
 ### Run
 
 1. `npx serve`
